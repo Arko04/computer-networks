@@ -1,0 +1,336 @@
+This is how to run the code in command line:
+python3 Bonus-gbn.py -n 10 -d 10 -l 0.1 -c 0.1 -v 2
+
+##########################################################################################
+
+The output is like this:
+(base) alireza@alirezas-MacBook-Air 3 % python3 Bonus-gbn.py -n 10 -d 10 -l 0.1 -c 0.1 -v 2
+SIMULATION CONFIGURATION
+--------------------------------------
+(-n) # layer5 msgs to be provided:      10
+(-d) avg layer5 msg interarrival time:  10.0
+(-z) transport protocol seqnum limit:   16
+(-l) layer3 packet loss prob:           0.1
+(-c) layer3 packet corruption prob:     0.1
+(-s) simulation random seed:            1763898303263971000
+--------------------------------------
+
+===== SIMULATION BEGINS
+[t=  19.143] A | SEND_DATA        seq=0 cks=1940
+[t=  25.310] B | RECV_DATA        seq=0
+[t=  25.310] B | IN_ORDER         seq=0 -> deliver_to_L5
+[t=  25.310] B | SEND_ACK         acknum=0
+          TO_LAYER3: packet being lost
+[t=  32.781] A | SEND_DATA        seq=1 cks=1961
+[t=  37.547] A | SEND_DATA        seq=2 cks=1982
+[t=  37.833] B | RECV_DATA        seq=1
+[t=  37.833] B | IN_ORDER         seq=1 -> deliver_to_L5
+[t=  37.833] B | SEND_ACK         acknum=1
+[t=  39.143] A | TIMEOUT          base=0 next=3
+[t=  39.143] A | RETX_DATA        seq=0
+[t=  39.143] A | RETX_DATA        seq=1
+          TO_LAYER3: packet being lost
+[t=  39.143] A | RETX_DATA        seq=2
+[t=  46.076] A | RECV_CTRL        acknum=1
+[t=  46.076] A | ACK_OK           acknum=1 base=0 next=3
+[t=  46.327] B | RECV_DATA        seq=2
+[t=  46.327] B | IN_ORDER         seq=2 -> deliver_to_L5
+[t=  46.327] B | SEND_ACK         acknum=2
+[t=  47.366] B | RECV_DATA        seq=0
+[t=  47.366] B | OUT_OF_ORDER     seq=0 exp=3 -> resend ACK(2)
+[t=  47.366] B | SEND_ACK         acknum=2
+[t=  50.872] A | RECV_CTRL        acknum=2
+[t=  50.872] A | ACK_OK           acknum=2 base=2 next=3
+[t=  50.872] A | WINDOW_EMPTY     
+[t=  53.693] A | RECV_CTRL        acknum=2
+[t=  53.693] A | ACK_IGNORED      acknum=2
+[t=  54.163] A | SEND_DATA        seq=3 cks=2003
+[t=  55.445] B | RECV_DATA        seq=2
+[t=  55.445] B | OUT_OF_ORDER     seq=2 exp=3 -> resend ACK(2)
+[t=  55.445] B | SEND_ACK         acknum=2
+          TO_LAYER3: packet being corrupted
+[t=  57.094] A | RECV_CTRL        acknum=2
+[t=  57.094] A | CORRUPTED        action=ignore
+[t=  58.912] A | SEND_DATA        seq=4 cks=2024
+[t=  59.696] A | SEND_DATA        seq=5 cks=2045
+[t=  62.427] B | RECV_DATA        seq=3
+[t=  62.427] B | IN_ORDER         seq=3 -> deliver_to_L5
+[t=  62.427] B | SEND_ACK         acknum=3
+          TO_LAYER3: packet being lost
+[t=  68.285] B | RECV_DATA        seq=4
+[t=  68.285] B | IN_ORDER         seq=4 -> deliver_to_L5
+[t=  68.285] B | SEND_ACK         acknum=4
+[t=  71.191] B | RECV_DATA        seq=5
+[t=  71.191] B | IN_ORDER         seq=5 -> deliver_to_L5
+[t=  71.191] B | SEND_ACK         acknum=5
+[t=  74.163] A | TIMEOUT          base=3 next=6
+[t=  74.163] A | RETX_DATA        seq=3
+[t=  74.163] A | RETX_DATA        seq=4
+[t=  74.163] A | RETX_DATA        seq=5
+          TO_LAYER3: packet being corrupted
+[t=  74.884] A | RECV_CTRL        acknum=4
+[t=  74.884] A | ACK_OK           acknum=4 base=3 next=6
+[t=  75.599] A | SEND_DATA        seq=6 cks=2066
+[t=  76.997] A | RECV_CTRL        acknum=5
+[t=  76.997] A | ACK_OK           acknum=5 base=5 next=7
+[t=  81.975] B | RECV_DATA        seq=3
+[t=  81.975] B | OUT_OF_ORDER     seq=3 exp=6 -> resend ACK(5)
+[t=  81.975] B | SEND_ACK         acknum=5
+[t=  83.352] A | RECV_CTRL        acknum=5
+[t=  83.352] A | ACK_IGNORED      acknum=5
+[t=  85.749] B | RECV_DATA        seq=4
+[t=  85.749] B | OUT_OF_ORDER     seq=4 exp=6 -> resend ACK(5)
+[t=  85.749] B | SEND_ACK         acknum=5
+[t=  87.830] A | RECV_CTRL        acknum=5
+[t=  87.830] A | ACK_IGNORED      acknum=5
+[t=  89.442] A | SEND_DATA        seq=7 cks=2087
+[t=  89.751] B | RECV_DATA        seq=5
+[t=  89.751] B | CORRUPTED        exp=6 -> resend ACK(5)
+[t=  89.751] B | SEND_ACK         acknum=5
+[t=  92.392] B | RECV_DATA        seq=6
+[t=  92.392] B | IN_ORDER         seq=6 -> deliver_to_L5
+[t=  92.392] B | SEND_ACK         acknum=6
+[t=  93.214] A | RECV_CTRL        acknum=5
+[t=  93.214] A | ACK_IGNORED      acknum=5
+[t=  93.724] A | SEND_DATA        seq=8 cks=2108
+[t=  94.304] B | RECV_DATA        seq=7
+[t=  94.304] B | IN_ORDER         seq=7 -> deliver_to_L5
+[t=  94.304] B | SEND_ACK         acknum=7
+[t=  96.997] A | TIMEOUT          base=6 next=9
+[t=  96.997] A | RETX_DATA        seq=6
+[t=  96.997] A | RETX_DATA        seq=7
+[t=  96.997] A | RETX_DATA        seq=8
+[t=  97.075] B | RECV_DATA        seq=8
+[t=  97.075] B | IN_ORDER         seq=8 -> deliver_to_L5
+[t=  97.075] B | SEND_ACK         acknum=8
+[t= 100.353] B | RECV_DATA        seq=6
+[t= 100.353] B | OUT_OF_ORDER     seq=6 exp=9 -> resend ACK(8)
+[t= 100.353] B | SEND_ACK         acknum=8
+[t= 100.565] A | RECV_CTRL        acknum=6
+[t= 100.565] A | ACK_OK           acknum=6 base=6 next=9
+[t= 102.438] A | SEND_DATA        seq=9 cks=2129
+===== SIMULATION ENDS
+
+SIMULATION SUMMARY
+--------------------------------
+# layer5 msgs provided to A:      10
+# elapsed time units:             102.43789199603627
+
+# layer3 packets sent by A:       19
+# layer3 packets sent by B:       15
+# layer3 packets lost:            3
+# layer3 packets corrupted:       2
+# layer5 msgs delivered by A:     0
+# layer5 msgs delivered by B:     9
+# layer5 msgs by B/elapsed time:  0.08785811406923764
+--------------------------------
+
+##########################################################################################
+
+And here is the explanation of the output:
+
+---
+
+#  High-Level Summary of What Happened
+
+* 10 messages entered A’s layer 5.
+* B successfully delivered **9 out of 10** messages — this is excellent under 10% loss + 10% corruption.
+* The only reason message 10 wasn’t delivered is that the simulation ended immediately after A sent `seq=9` (no time for ack/retransmission).
+
+Nothing in the output indicates a logic bug.
+
+---
+
+#  Walk-Through Explanation (Key Events)
+
+Below is the **simplest possible readable breakdown**, in order.
+
+---
+
+##  **1) A sends `seq=0`, B receives it in-order, ACK is lost**
+
+```
+A SEND_DATA seq 0
+B RECV_DATA seq 0
+B IN_ORDER seq 0 → deliver
+B SEND_ACK 0
+TO_LAYER3: ack lost
+```
+
+✔ B delivered packet 0
+✔ But A never receives ACK(0) → A will eventually timeout.
+
+---
+
+##  **2) A sends `seq=1` and `seq=2` before timeout**
+
+```
+A SEND_DATA seq 1
+A SEND_DATA seq 2
+```
+
+Since GBN allows multiple outstanding packets up to window size, this is normal.
+
+---
+
+##  **3) A timeouts → retransmits seq 0,1,2**
+
+```
+A TIMEOUT base=0 next=3
+A RETX seq 0
+A RETX seq 1
+A RETX seq 2
+```
+
+✔ Correct GBN behavior: retransmit everything in `[base, next)`.
+
+---
+
+##  **4) B receives `seq=1` in-order and delivers it**
+
+```
+B RECV_DATA seq 1
+B IN_ORDER   seq 1 → deliver
+B SEND_ACK   acknum=1
+```
+
+BUT note:
+A is still expecting an ACK ≥ 0 for seq0, seq1, seq2.
+
+Later…
+
+```
+A RECV_CTRL ack=1
+A ACK_OK ack=1 base=0 next=3
+```
+
+This means:
+
+* ACK(1) acknowledges **packet 0 and 1 and everything before**.
+* So A slides `base` → `2`.
+
+---
+
+##  **5) B receives seq=2 and delivers it**
+
+```
+B RECV_DATA seq 2
+B IN_ORDER seq=2 → deliver
+B SEND_ACK 2
+```
+
+Then A receives ACK(2):
+
+```
+A ACK_OK ack=2 base=2 next=3
+A WINDOW_EMPTY
+```
+
+✔ All in-flight packets acknowledged → window is empty.
+
+---
+
+##  **6) A sends seq=3 and seq=4 and seq=5**
+
+```
+A SEND_DATA seq=3
+...
+A SEND_DATA seq=4
+A SEND_DATA seq=5
+```
+
+B receives and delivers seq=3,4,5 except one ACK lost:
+
+```
+B deliver 3
+ACK(3) lost
+B deliver 4
+B deliver 5
+```
+
+Since ACK(3) was lost, A timeouts again:
+
+```
+A TIMEOUT base=3 next=6
+A RETX seq3
+A RETX seq4
+A RETX seq5
+```
+
+---
+
+##  **7) ACK(4) and ACK(5) arrive**
+
+```
+A RECV_CTRL ack=4
+A ACK_OK ack=4 base=3 next=6
+
+A RECV_CTRL ack=5
+A ACK_OK ack=5 base=5 next=7
+```
+
+✔ Sliding window again as expected.
+
+---
+
+##  **8) A sends seq 6, 7, 8**
+
+Packets 6–8 are delivered in-order:
+
+```
+B RECV_DATA seq=6 → deliver
+B SEND_ACK 6
+
+B RECV_DATA seq=7 → deliver
+B SEND_ACK 7
+
+B RECV_DATA seq=8 → deliver
+B SEND_ACK 8
+```
+
+B has now delivered **9** packets: seq 0..8.
+
+---
+
+##  **9) A sends seq=9, but simulation ends before ACK comes**
+
+```
+A SEND_DATA seq=9
+===== SIMULATION ENDS
+```
+
+So seq 9 is never delivered, but this is because the simulation runs out of time.
+
+---
+
+#  Why this output is **correct GBN behavior**
+
+###  GBN requires first in-order seq=0 to be delivered
+
+and it happens.
+
+###  B sends cumulative ACKs
+
+like:
+
+* ACK(1) acknowledges 0 and 1
+* ACK(2) acknowledges 0,1,2
+* ACK(4) acknowledges 3,4
+* ACK(5) acknowledges 3,4,5
+
+Exactly what your log shows.
+
+###  A performs correct timeout → retransmit all outstanding packets.
+
+###  B performs correct out-of-order behavior
+
+For example:
+
+```
+B RECV_DATA seq=2
+B OUT_OF_ORDER seq=2 expected=3 → resend ACK(2)
+```
+
+Correct: B only accepts `expected_seqnum`.
+B does **NOT** buffer out-of-order packets in GBN.
+

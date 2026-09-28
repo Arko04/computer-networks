@@ -1,0 +1,317 @@
+This is how I run the code:
+python3 rdtsim.py -n 6 -d 1000 -l 0.1 -c 0.2 -v 2
+##########################################################################################
+And this is the output of the code:
+
+(base) alireza@alirezas-MacBook-Air 3 % python3 rdtsim.py -n 6 -d 1000 -l 0.1 -c 0.2 -v 2
+SIMULATION CONFIGURATION
+--------------------------------------
+(-n) # layer5 msgs to be provided:      6
+(-d) avg layer5 msg interarrival time:  1000.0
+(-z) transport protocol seqnum limit:   16
+(-l) layer3 packet loss prob:           0.1
+(-c) layer3 packet corruption prob:     0.2
+(-s) simulation random seed:            1763893021329149000
+--------------------------------------
+
+===== SIMULATION BEGINS
+[t=1787.107] A | SEND_DATA        seq=0 cks=1940
+[t=1795.399] B | RECV_DATA        seq=0
+[t=1795.399] B | IN_ORDER         seq=0 → deliver_to_L5
+[t=1795.399] B | SEND_ACK         seq=0
+          TO_LAYER3: packet being corrupted
+[t=1801.676] A | RECV_CTRL        acknum=0
+[t=1801.676] A | CORRUPTED        action=retx_last
+          TO_LAYER3: packet being corrupted
+[t=1809.160] B | RECV_DATA        seq=0
+[t=1809.160] B | CORRUPTED        exp=1 → SEND_NACK
+[t=1809.160] B | SEND_NACK        seq=1
+[t=1810.215] A | RECV_CTRL        acknum=1
+[t=1810.215] A | CTRL_IGNORED     acknum=1
+[t=1821.676] A | TIMEOUT          pending=True
+[t=1821.676] A | RETX_DATA        seq=0
+[t=1828.692] B | RECV_DATA        seq=0
+[t=1828.692] B | DUPLICATE        seq=0 → resend_ACK(0)
+[t=1828.692] B | SEND_ACK         seq=0
+          TO_LAYER3: packet being corrupted
+[t=1835.205] A | RECV_CTRL        acknum=0
+[t=1835.205] A | CORRUPTED        action=retx_last
+          TO_LAYER3: packet being corrupted
+[t=1838.963] B | RECV_DATA        seq=0
+[t=1838.963] B | CORRUPTED        exp=1 → SEND_NACK
+[t=1838.963] B | SEND_NACK        seq=1
+[t=1843.162] A | RECV_CTRL        acknum=1
+[t=1843.162] A | CTRL_IGNORED     acknum=1
+[t=1855.205] A | TIMEOUT          pending=True
+[t=1855.205] A | RETX_DATA        seq=0
+[t=1857.790] B | RECV_DATA        seq=0
+[t=1857.790] B | DUPLICATE        seq=0 → resend_ACK(0)
+[t=1857.790] B | SEND_ACK         seq=0
+[t=1861.576] A | RECV_CTRL        acknum=0
+[t=1861.576] A | ACK_OK           seq=0
+[t=3786.288] A | SEND_DATA        seq=1 cks=1961
+[t=3790.541] B | RECV_DATA        seq=1
+[t=3790.541] B | IN_ORDER         seq=1 → deliver_to_L5
+[t=3790.541] B | SEND_ACK         seq=1
+[t=3792.432] A | RECV_CTRL        acknum=1
+[t=3792.432] A | ACK_OK           seq=1
+[t=3933.956] A | SEND_DATA        seq=0 cks=1980
+          TO_LAYER3: packet being lost
+[t=3953.956] A | TIMEOUT          pending=True
+[t=3953.956] A | RETX_DATA        seq=0
+[t=3961.871] B | RECV_DATA        seq=0
+[t=3961.871] B | IN_ORDER         seq=0 → deliver_to_L5
+[t=3961.871] B | SEND_ACK         seq=0
+[t=3966.202] A | RECV_CTRL        acknum=0
+[t=3966.202] A | ACK_OK           seq=0
+[t=4773.282] A | SEND_DATA        seq=1 cks=2001
+          TO_LAYER3: packet being corrupted
+[t=4777.090] B | RECV_DATA        seq=1
+[t=4777.090] B | CORRUPTED        exp=1 → SEND_NACK
+[t=4777.090] B | SEND_NACK        seq=1
+          TO_LAYER3: packet being corrupted
+[t=4780.438] A | RECV_CTRL        acknum=1
+[t=4780.438] A | CORRUPTED        action=retx_last
+[t=4787.446] B | RECV_DATA        seq=1
+[t=4787.446] B | IN_ORDER         seq=1 → deliver_to_L5
+[t=4787.446] B | SEND_ACK         seq=1
+[t=4794.762] A | RECV_CTRL        acknum=1
+[t=4794.762] A | ACK_OK           seq=1
+[t=5505.900] A | SEND_DATA        seq=0 cks=2020
+[t=5509.479] B | RECV_DATA        seq=0
+[t=5509.479] B | IN_ORDER         seq=0 → deliver_to_L5
+[t=5509.479] B | SEND_ACK         seq=0
+[t=5513.269] A | RECV_CTRL        acknum=0
+[t=5513.269] A | ACK_OK           seq=0
+[t=5683.692] A | SEND_DATA        seq=1 cks=2041
+          TO_LAYER3: packet being lost
+===== SIMULATION ENDS
+
+SIMULATION SUMMARY
+--------------------------------
+# layer5 msgs provided to A:      6
+# elapsed time units:             5683.692072603042
+
+# layer3 packets sent by A:       12
+# layer3 packets sent by B:       10
+# layer3 packets lost:            2
+# layer3 packets corrupted:       6
+# layer5 msgs delivered by A:     0
+# layer5 msgs delivered by B:     5
+# layer5 msgs by B/elapsed time:  0.0008797098674823314
+--------------------------------
+
+##########################################################################################
+And here is the explanation of different part of the code:
+---
+## 1. What the config means
+
+* 6 messages will be generated at layer 5 for A (`-n 6`).
+* Average time between messages: 1000 time units (`-d 1000`).
+* Loss prob = 0.1, corruption prob = 0.2 → the channel is quite bad.
+* `-v 2` → simulator + our own `TRACE>0` logs.
+
+With alternating bit, A sends: seq 0,1,0,1,0,1 (if all succeed).
+
+---
+
+## 2. First application message (seq = 0)
+
+```text
+[t=1787] A | SEND_DATA  seq=0
+[t=1795] B | RECV_DATA  seq=0
+[t=1795] B | IN_ORDER   seq=0 → deliver_to_L5
+[t=1795] B | SEND_ACK   seq=0
+          TO_LAYER3: packet being corrupted
+[t=1801] A | RECV_CTRL  acknum=0
+[t=1801] A | CORRUPTED  action=retx_last
+```
+
+* A sends data(0), B receives it correctly and delivers to its layer 5.
+* B sends ACK(0), but that ACK is corrupted.
+* A receives a corrupted control packet ⇒ in our code: **treat as NACK** and retransmit last packet(0).
+
+---
+
+## 3. A’s retransmission and B’s NACK “with 1”
+
+```text
+          TO_LAYER3: packet being corrupted
+[t=1809] B | RECV_DATA  seq=0
+[t=1809] B | CORRUPTED  exp=1 → SEND_NACK
+[t=1809] B | SEND_NACK  seq=1
+[t=1810] A | RECV_CTRL  acknum=1
+[t=1810] A | CTRL_IGNORED acknum=1
+```
+
+* The retransmitted data(0) itself is corrupted on the way to B.
+* B can’t trust it, and **its `expected_seqnum` is now 1** (because it already delivered data(0) before).
+  For corrupted data, we coded: “send NACK for expected seq” → NACK with `acknum = 1`.
+* A is still waiting for ACK of seq 0. It receives a *non-corrupted* NACK(1), but since `acknum != next_seqnum(0)`, we mark it as **CTRL_IGNORED**.
+
+So at this point:
+
+* B has already delivered the first message.
+* A still thinks seq 0 is undelivered.
+
+---
+
+## 4. First timeout for seq 0 and duplicate handling
+
+```text
+[t=1821] A | TIMEOUT    pending=True
+[t=1821] A | RETX_DATA  seq=0
+[t=1828] B | RECV_DATA  seq=0
+[t=1828] B | DUPLICATE  seq=0 → resend_ACK(0)
+[t=1828] B | SEND_ACK   seq=0
+          TO_LAYER3: packet being corrupted
+[t=1835] A | RECV_CTRL  acknum=0
+[t=1835] A | CORRUPTED  action=retx_last
+```
+
+* Timer expires → A retransmits data(0) again.
+* B’s `expected_seqnum` is still 1, so seeing seq 0 is **duplicate** → it just resends ACK(0).
+* That ACK(0) is corrupted; A sees corrupted control → retransmit again.
+
+---
+
+## 5. Second “corrupt-then-NACK(1)” pattern and second timeout
+
+```text
+          TO_LAYER3: packet being corrupted
+[t=1838] B | RECV_DATA  seq=0
+[t=1838] B | CORRUPTED  exp=1 → SEND_NACK
+[t=1838] B | SEND_NACK  seq=1
+[t=1843] A | RECV_CTRL  acknum=1
+[t=1843] A | CTRL_IGNORED acknum=1
+[t=1855] A | TIMEOUT    pending=True
+[t=1855] A | RETX_DATA  seq=0
+[t=1857] B | RECV_DATA  seq=0
+[t=1857] B | DUPLICATE  seq=0 → resend_ACK(0)
+[t=1857] B | SEND_ACK   seq=0
+[t=1861] A | RECV_CTRL  acknum=0
+[t=1861] A | ACK_OK     seq=0
+```
+
+* Again: retransmitted data(0) becomes corrupted → B sends NACK(1) → A ignores it.
+* Another timeout → A retransmits data(0).
+* This time B’s duplicate-ACK(0) arrives **uncorrupted**, A accepts ACK for seq 0 and finally flips to seq 1.
+
+So: first application message was actually delivered at t≈1795; A only *realizes* success at t≈1861.
+
+---
+
+## 6. Second message (seq = 1) – clean success
+
+```text
+[t=3786] A | SEND_DATA  seq=1
+[t=3790] B | RECV_DATA  seq=1
+[t=3790] B | IN_ORDER   seq=1 → deliver_to_L5
+[t=3790] B | SEND_ACK   seq=1
+[t=3792] A | RECV_CTRL  acknum=1
+[t=3792] A | ACK_OK     seq=1
+```
+
+* Straightforward successful transfer of message 2.
+
+---
+
+## 7. Third message (seq = 0) – data lost once
+
+```text
+[t=3933] A | SEND_DATA  seq=0
+          TO_LAYER3: packet being lost
+[t=3953] A | TIMEOUT    pending=True
+[t=3953] A | RETX_DATA  seq=0
+[t=3961] B | RECV_DATA  seq=0
+[t=3961] B | IN_ORDER   seq=0 → deliver_to_L5
+[t=3961] B | SEND_ACK   seq=0
+[t=3966] A | RECV_CTRL  acknum=0
+[t=3966] A | ACK_OK     seq=0
+```
+
+* Data(0) is lost → no packet reaches B.
+* Timeout → A retransmits.
+* B receives in order, delivers to L5, ACK arrives correctly.
+
+---
+
+## 8. Fourth message (seq = 1) – data corrupted then OK
+
+```text
+[t=4773] A | SEND_DATA  seq=1
+          TO_LAYER3: packet being corrupted
+[t=4777] B | RECV_DATA  seq=1
+[t=4777] B | CORRUPTED  exp=1 → SEND_NACK
+[t=4777] B | SEND_NACK  seq=1
+          TO_LAYER3: packet being corrupted
+[t=4780] A | RECV_CTRL  acknum=1
+[t=4780] A | CORRUPTED  action=retx_last
+[t=4787] B | RECV_DATA  seq=1
+[t=4787] B | IN_ORDER   seq=1 → deliver_to_L5
+[t=4787] B | SEND_ACK   seq=1
+[t=4794] A | RECV_CTRL  acknum=1
+[t=4794] A | ACK_OK     seq=1
+```
+
+* Data(1) is corrupted → B sends NACK(1), but NACK itself is corrupted.
+* A sees corrupted control, retransmits data(1).
+* Second copy arrives OK → B delivers and ACKs → ACK arrives OK → A flips to seq 0.
+
+---
+
+## 9. Fifth message (seq = 0) – clean success
+
+```text
+[t=5505] A | SEND_DATA  seq=0
+[t=5509] B | RECV_DATA  seq=0
+[t=5509] B | IN_ORDER   seq=0 → deliver_to_L5
+[t=5509] B | SEND_ACK   seq=0
+[t=5513] A | RECV_CTRL  acknum=0
+[t=5513] A | ACK_OK     seq=0
+```
+
+* No problems here: 5th app message delivered.
+
+---
+
+## 10. Sixth message (seq = 1) – simulation stops before completion
+
+```text
+[t=5683] A | SEND_DATA  seq=1
+          TO_LAYER3: packet being lost
+===== SIMULATION ENDS
+```
+
+* A sends the 6th message (seq 1).
+* That data packet is **lost**.
+* Before A’s timer fires and before any retransmission/ACK, the simulator hits the message/time limit and ends.
+
+So:
+
+* 6 messages **generated** for A (`# layer5 msgs provided to A: 6`)
+* Only **5 messages actually delivered** to B’s layer 5 (`layer5 msgs delivered by B: 5`)
+  → the last one never completed because its first copy was lost and the simulation ended before retry.
+
+---
+
+## 11. Summary line sanity-check
+
+```text
+# layer3 packets sent by A: 12
+# layer3 packets sent by B: 10
+# layer3 packets lost:      2
+# layer3 packets corrupted: 6
+```
+
+You can match all losses/corruptions in the trace:
+
+* Losses:
+
+  * data(0) at t=3933
+  * data(1) at t=5683
+* Corruptions (data or control): exactly the lines with `TO_LAYER3: packet being corrupted`.
+
+Everything is consistent with a working alternating-bit protocol on a noisy channel.
+
+If you like, next I can annotate your log directly (line-by-line with comments) in a text file so you can keep it as a “template explanation” for future runs.
